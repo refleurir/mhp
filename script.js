@@ -12,6 +12,19 @@ let mediaRecorder; // MediaRecorder 객체
 let audioChunks = []; // 녹음 데이터 저장
 let isRecording = false; // 녹음 상태 추적
 
+// 버튼 및 필드 상태 업데이트 함수
+function updateModeVisibility() {
+  if (isTextMode) {
+    inputField.style.display = 'block';
+    searchButton.style.display = 'block';
+    micButton.style.display = 'none';
+  } else {
+    inputField.style.display = 'none';
+    searchButton.style.display = 'none';
+    micButton.style.display = 'block';
+  }
+}
+
 // 버튼 색상 업데이트 함수
 function updateButtonStyles() {
   if (isTextMode) {
@@ -33,6 +46,7 @@ function updateButtonStyles() {
 textButton.addEventListener('click', () => {
   isTextMode = true;
   updateButtonStyles();
+  updateModeVisibility();
   alert('텍스트 입력');
   inputField.focus();
 });
@@ -41,11 +55,12 @@ textButton.addEventListener('click', () => {
 soundButton.addEventListener('click', () => {
   isTextMode = false;
   updateButtonStyles();
+  updateModeVisibility();
   alert('음성 입력');
 });
 
 // Search 버튼 클릭 이벤트
-document.querySelector('.px-4.py-2.bg-blue-500.text-white.rounded-r-lg').addEventListener('click', async () => {
+searchButton.addEventListener('click', async () => {
   const userInput = inputField.value.trim();
   if (!userInput) {
     alert('텍스트를 입력하세요!');
@@ -126,3 +141,4 @@ function displayResponse(responseText) {
   resultDiv.className = 'p-4 bg-gray-200 rounded-lg text-center mt-4';
   emotionSection.appendChild(resultDiv);
 }
+
