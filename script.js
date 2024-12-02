@@ -7,26 +7,48 @@ const micButton = document.querySelector('.bg-blue-500.text-white.p-4.rounded-fu
 const inputField = document.querySelector('input[type="text"]'); // 텍스트 입력 필드
 const emotionSection = document.querySelector('.bg-white.p-4.rounded-lg.shadow-md'); // 결과 표시 영역
 
+let isTextMode = true;
 let mediaRecorder; // MediaRecorder 객체
 let audioChunks = []; // 녹음 데이터 저장
 let isRecording = false; // 녹음 상태 추적
 
+// 버튼 색상 업데이트 함수
+function updateButtonStyles() {
+  if (isTextMode) {
+    textButton.classList.add('bg-blue-500', 'text-white');
+    textButton.classList.remove('bg-gray-200', 'text-gray-800');
+
+    soundButton.classList.add('bg-gray-200', 'text-gray-800');
+    soundButton.classList.remove('bg-blue-500', 'text-white');
+  } else {
+    soundButton.classList.add('bg-blue-500', 'text-white');
+    soundButton.classList.remove('bg-gray-200', 'text-gray-800');
+
+    textButton.classList.add('bg-gray-200', 'text-gray-800');
+    textButton.classList.remove('bg-blue-500', 'text-white');
+  }
+}
+
 // Text 버튼 이벤트
 textButton.addEventListener('click', () => {
+  isTextMode = true;
+  updateButtonStyles();
   alert('텍스트 입력');
   inputField.focus();
 });
 
 // Sound 버튼 이벤트
 soundButton.addEventListener('click', () => {
+  isTextMode = false;
+  updateButtonStyles();
   alert('음성 입력');
 });
 
-// Search 버튼 이벤트
-searchButton.addEventListener('click', async () => {
+// Search 버튼 클릭 이벤트
+document.querySelector('.px-4.py-2.bg-blue-500.text-white.rounded-r-lg').addEventListener('click', async () => {
   const userInput = inputField.value.trim();
   if (!userInput) {
-    alert('텍스트를 입력하세요');
+    alert('텍스트를 입력하세요!');
     return;
   }
 
@@ -98,7 +120,7 @@ micButton.addEventListener('click', async () => {
 
 // 결과 표시 함수
 function displayResponse(responseText) {
-  emotionSection.innerHTML = ''; //이전 결과 삭제
+  //emotionSection.innerHTML = ''; //이전 결과 삭제
   const resultDiv = document.createElement('div');
   resultDiv.textContent = responseText;
   resultDiv.className = 'p-4 bg-gray-200 rounded-lg text-center mt-4';
