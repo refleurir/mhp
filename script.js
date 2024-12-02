@@ -12,6 +12,66 @@ let mediaRecorder; // MediaRecorder 객체
 let audioChunks = []; // 녹음 데이터 저장
 let isRecording = false; // 녹음 상태 추적
 
+// 감정 설명 데이터
+const emotionDescriptions = {
+  Hope: 'Hope is the feeling of expectation and desire for a certain thing to happen.',
+  Love: 'Love is a profound and caring affection toward someone or something.',
+  Happiness: 'Happiness is a state of well-being and contentment.',
+  Rage: 'Rage is an intense and uncontrolled anger.',
+  Sadness: 'Sadness is an emotional pain associated with loss, despair, or helplessness.',
+  Fear: 'Fear is an unpleasant emotion caused by the threat of danger or harm.',
+};
+
+// 팝업 생성 함수
+function createPopup(emotion, description) {
+  // 컨테이너
+  const popup = document.createElement('div');
+  popup.className =
+    'fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50';
+  popup.id = 'emotion-popup';
+
+  // 팝업 내용
+  const popupContent = document.createElement('div');
+  popupContent.className =
+    'bg-white p-6 rounded-lg shadow-lg w-1/3 relative text-center';
+
+  // 제목
+  const title = document.createElement('h2');
+  title.className = 'text-xl font-bold mb-4';
+  title.textContent = emotion;
+
+  // 설명
+  const descriptionText = document.createElement('p');
+  descriptionText.className = 'text-gray-700 mb-4';
+  descriptionText.textContent = description;
+
+  // 닫기 버튼
+  const closeButton = document.createElement('button');
+  closeButton.className =
+    'absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center';
+  closeButton.innerHTML = '×';
+  closeButton.addEventListener('click', () => {
+    document.body.removeChild(popup);
+  });
+
+  // 팝업 구성
+  popupContent.appendChild(title);
+  popupContent.appendChild(descriptionText);
+  popupContent.appendChild(closeButton);
+  popup.appendChild(popupContent);
+
+  document.body.appendChild(popup);
+}
+
+// 감정 버튼 클릭 이벤트
+emotionButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const emotion = button.textContent; 
+    const description = emotionDescriptions[emotion]; 
+    createPopup(emotion, description); 
+  });
+});
+
 // 버튼 및 필드 상태 업데이트 함수
 function updateModeVisibility() {
   if (isTextMode) {
@@ -141,4 +201,3 @@ function displayResponse(responseText) {
   resultDiv.className = 'p-4 bg-gray-200 rounded-lg text-center mt-4';
   emotionSection.appendChild(resultDiv);
 }
-
